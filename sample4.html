@@ -1,0 +1,47 @@
+<html>
+  <head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script>
+    function asyncSend() {
+
+      // HTMLの入力値を元に呼び出すAPIのURLを編集
+      var uri = "https://api.github.com/users/" + document.getElementsByName("name").item(0).value;
+
+      // API呼び出し
+      $.ajax({
+        type: "GET",
+        url: uri,
+//        data: {login:'octcat', id:1},
+        dataType: "jsonp",
+
+      })
+      //↓フォームの送信に成功した場合の処理
+      .done(function(data) {
+        // コンソールにログ出力（確認要）
+        console.log(data);
+        // HTML出力ようにAPIレスポンスのjsonを編集
+        var html = buildHTML(data);
+        // HTMLの特定部分にレスポンスを出力
+        target = document.getElementById("result");
+        target.innerHTML = html;
+        $('.result').append(html); //$.append関数は操作後はDOMに要素が追加された状態になる。
+
+        //textField.val(''); //
+      });
+    }
+
+    // jsonデータをHTML出力用に編集する
+    function buildHTML(data) {
+      // jsonをテキストにするだけ
+      return JSON.stringify(data);
+    }
+  </script>
+  </head>
+  <body>
+    <form name="fm">
+      <label>GitHubのユーザー名を入力してください：<input type="text" name="name" size="20" placeholder="yota-kitabayashi"></label>
+      <input type="button" id="btnsend" name="submit" value="送信" onclick="asyncSend()">
+    </form>
+    <div id="result"></div><!-- このdiv内に整形したデータを非同期で入れる --!>
+  </body>
+</html>

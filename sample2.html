@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <script>
+    function send() {
+      var contentType = "application/x-www-form-urlencoded";
+      if (document.getElementById("type") != "GET") {
+          contentType = "application/json";
+      }
+      var ajax = ajax({
+          url: document.getElementById("uri"),
+          type: document.getElementById("type"),
+          dataType: "json",
+          async: false,
+          data: document.getElementById("data"),
+          beforeSend: function() {
+              document.getElementById("response").empty();
+              document.getElementById("code").empty();
+          },
+          complete: function(msg) {
+              ("#response").text(msg.responseJSON);
+              ("#code").text(msg.status + " " + msg.statusText);
+          }
+      });
+    }
+  </script>
+  </head>
+  <body>
+    <table class="table table-bordered">
+        <tr>
+          <th class="col-xs-3 active">URI</th>
+          <td>
+            <div class="col-xs-10">
+              <input type="text" name="uri" id="uri" class="form-control input input-xlarge" placeholder="https://github.com/users/yota-kitabayashi"/>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th class="active">Request Type</th>
+          <td>
+            <div class="col-xs-3">
+              <select name="type" id="type" class="form-control">
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+                <option value="PUT">PUT</option>
+                <option value="DELETE">DELETE</option>
+                <option value="OPTIONS">OPTIONS</option>
+              </select>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th class="active">リクエスト</th>
+          <td>
+            <div class="col-xs-10">
+              <textarea class="form-control" id="data" rows="5"></textarea>
+            </div>
+          </td>
+        </tr>
+      </table>
+      <button class="btn btn-primary btn-lg btn-block" type="button" onclick="send()">送信</button>
+
+    <h3>ResponseCODE</h3>
+    <pre id="code" class="bg-info"></pre>
+
+    <h3>ResponseJSON</h3>
+    <pre id="response" class="bg-info"></pre>
+
+  </body>
+</html>
